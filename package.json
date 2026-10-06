@@ -1,0 +1,20 @@
+{
+  "name": "commaenv",
+  "version": "1.0.0",
+  "description": "An environment variable parser for nodejs.",
+  "keywords": [
+    "env"
+  ],
+  "license": "GPL-3.0-only",
+  "author": "chara-dreemurr-67",
+  "type": "module",
+  "main": "main.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}
