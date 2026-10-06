@@ -39,7 +39,7 @@ console.log(port, nodeEnv, debugMode, origins);
 ### Or create your own instance
 ```ts
 import { EnvLoader } from "commaenv";
-const Env = new EnvLoaer();
+const Env = new EnvLoader();
 
 // The rest should be the same as the above example.
 ```
