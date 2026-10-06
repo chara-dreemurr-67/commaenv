@@ -8,7 +8,7 @@ This package is useful when you want:
 
 - typed environment values instead of raw strings
 - default values for missing variables
-- strict validation for numbers, booleans, and arrays
+- strict validation for strings, numbers, booleans, arrays, and literal unions
 - lightweight runtime behavior without extra config
 
 ## Installation
@@ -19,6 +19,7 @@ npm install commaenv
 
 ## Basic usage
 
+### Use the global Env singleton
 ```ts
 import Env from "commaenv";
 
@@ -33,6 +34,14 @@ const debugMode = Env.GetVariable<boolean>("DEBUG_MODE");
 const origins = Env.GetVariable<string[]>("ALLOWED_ORIGINS");
 
 console.log(port, nodeEnv, debugMode, origins);
+```
+
+### Or create your own instance
+```ts
+import { EnvLoader } from "commaenv";
+const Env = new EnvLoaer();
+
+// The rest should be the same as the above example.
 ```
 
 ## Supported types
@@ -76,7 +85,7 @@ Env.RegisterVariable("NODE_ENV", Env.literal("development", "production", "test"
 const nodeEnv = Env.GetVariable<"development" | "production" | "test">("NODE_ENV");
 ```
 
-`Env.literal()` accepts a finite set of allowed values. It supports either strings or numbers, and it rejects anything outside that set.
+`Env.literal()` accepts a finite set of allowed values. It supports either strings or numbers, and rejects anything outside that set.
 
 ```ts
 Env.RegisterVariable("HTTP_STATUS", Env.literal(200, 201, 204).Default(204));
@@ -156,4 +165,4 @@ This project is licensed under the GPL-3.0-only license.
 
 ## Todo
 - ~~add literal type support~~
-- make GetVariable infer the type of the variable, if that's even possible
+- ~~make GetVariable infer the type of the variable, if that's even possible~~ currently not possible without major changes to the lib
