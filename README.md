@@ -69,6 +69,22 @@ Boolean values accept the following forms:
 
 The parser normalizes case and trims whitespace before evaluating.
 
+### Literal
+
+```ts
+Env.RegisterVariable("NODE_ENV", Env.literal("development", "production", "test"));
+const nodeEnv = Env.GetVariable<"development" | "production" | "test">("NODE_ENV");
+```
+
+`Env.literal()` accepts a finite set of allowed values. It supports either strings or numbers, and it rejects anything outside that set.
+
+```ts
+Env.RegisterVariable("HTTP_STATUS", Env.literal(200, 201, 204).Default(204));
+const status = Env.GetVariable<200 | 201 | 204>("HTTP_STATUS");
+```
+
+For string literals, values are checked after trimming whitespace. For numeric literals, the environment value is parsed as a number before being matched against the allowed values.
+
 ### Array
 
 ```ts
@@ -122,6 +138,8 @@ If the value is missing and no default exists, it throws a `TypeError`.
 - `Env.string()`
 - `Env.number()`
 - `Env.boolean()`
+- `Env.literal("development", "production")`
+- `Env.literal(200, 201, 204)`
 - `Env.array("string")`
 - `Env.array("number")`
 
@@ -130,10 +148,12 @@ If the value is missing and no default exists, it throws a `TypeError`.
 - This library does not load `.env` files.
 - It only reads from the current `process.env` object.
 - The package is designed to be small, explicit, and strict.
+- Default import gives you the EnvLoader singleton, while `import { EnvLoader } from "commaenv";` gives you the EnvLoader class so you can create an instance for yourself.
 
 ## License
 
 This project is licensed under the GPL-3.0-only license.
 
 ## Todo
-- add literal type support
+- ~~add literal type support~~
+- make GetVariable infer the type of the variable, if that's even possible

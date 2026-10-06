@@ -1,3 +1,4 @@
 export {
-    default
+    default,
+    EnvLoader
 } from "./Env.js";
