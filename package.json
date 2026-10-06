@@ -7,6 +7,11 @@
   ],
   "license": "GPL-3.0-only",
   "author": "chara-dreemurr-67",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chara-dreemurr-67/commaenv.git"
+  },
+  "homepage": "https://github.com/chara-dreemurr-67/commaenv#readme",
   "type": "module",
   "main": "main.js",
   "scripts": {
