@@ -13,7 +13,7 @@
   },
   "homepage": "https://github.com/chara-dreemurr-67/commaenv#readme",
   "type": "module",
-  "main": "main.js",
+  "main": "./public/main.js",
   "scripts": {
     "build": "tsc"
   },
