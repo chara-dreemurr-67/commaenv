@@ -1,6 +1,6 @@
 {
   "name": "commaenv",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An environment variable parser for nodejs.",
   "keywords": [
     "env"
