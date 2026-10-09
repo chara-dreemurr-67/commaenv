@@ -1,4 +1,4 @@
-import EnvDataType from "../EnvDataType.js";
+import EnvDataType from "../types/EnvDataType.js";
 
 export default class ELiteral<T extends number | string> extends EnvDataType<T> {
     private readonly AcceptableValues: Set<T>;

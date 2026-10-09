@@ -1,7 +1,8 @@
 export {
     default,
     EnvLoader
-} from "./Env.js";
+} from "./types/Env.js";
+export { default as EnvDataType } from "./types/EnvDataType.js";
 export { type default as EArray } from "./parsers/EArray.js";
 export { type default as EBoolean } from "./parsers/EBoolean.js";
 export { type default as ELiteral } from "./parsers/ELiteral.js";

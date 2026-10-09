@@ -1,4 +1,4 @@
-import EnvDataType from "../EnvDataType.js";
+import EnvDataType from "../types/EnvDataType.js";
 
 export default class EBoolean extends EnvDataType<boolean> {
     public Parse(Name: string): boolean {

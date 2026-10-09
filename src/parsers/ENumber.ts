@@ -1,4 +1,4 @@
-import EnvDataType from "../EnvDataType.js";
+import EnvDataType from "../types/EnvDataType.js";
 
 enum NumberType {
     Positive,

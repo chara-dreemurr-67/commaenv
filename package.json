@@ -20,7 +20,8 @@
   "main": "./public/main.js",
   "scripts": {
     "build": "tsc",
-    "buildtest": "tsc && npm pack"
+    "cleanbuild": "(if exist \"./public\" rmdir /s /q \"./public\") && tsc",
+    "buildtest": "npm run cleanbuild && npm pack"
   },
   "files": [
     "public"

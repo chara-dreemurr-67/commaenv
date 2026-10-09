@@ -1,9 +1,9 @@
 import EnvDataType from "./EnvDataType.js";
-import EArray from "./parsers/EArray.js";
-import ELiteral from "./parsers/ELiteral.js";
-import ENumber from "./parsers/ENumber.js";
-import EString from "./parsers/EString.js";
-import EBoolean from "./parsers/EBoolean.js"
+import EArray from "../parsers/EArray.js";
+import ELiteral from "../parsers/ELiteral.js";
+import ENumber from "../parsers/ENumber.js";
+import EString from "../parsers/EString.js";
+import EBoolean from "../parsers/EBoolean.js"
 
 type ValueType = number | unknown[] | string | boolean;
 
@@ -75,4 +75,6 @@ export class EnvLoader {
     }
 }
 
-export default new EnvLoader();
+const Env: EnvLoader = new EnvLoader();
+
+export default Env;

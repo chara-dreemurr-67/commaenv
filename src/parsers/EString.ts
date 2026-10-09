@@ -1,4 +1,4 @@
-import EnvDataType from "../EnvDataType.js";
+import EnvDataType from "../types/EnvDataType.js";
 
 export default class EString extends EnvDataType<string> {
     private ValidatorFunc?: (Env: string) => boolean;
