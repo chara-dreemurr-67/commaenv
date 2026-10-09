@@ -5,7 +5,7 @@ export default class EBoolean extends EnvDataType<boolean> {
         const Env: string | undefined = process.env[Name]?.trim().toLowerCase();
 
         if(!Env) {
-            if(!this.DefaultValue)
+            if(this.DefaultValue == undefined)
                 throw new TypeError(`Variable ${Name} doesn't exists.`);
             return this.DefaultValue;
         }
@@ -18,7 +18,7 @@ export default class EBoolean extends EnvDataType<boolean> {
     }
 
     public Default(Value: boolean): this {
-        if(Value != undefined && typeof Value !== "boolean")
+        if(typeof Value !== "boolean")
             throw new TypeError("Mismatched type between default value and the provided type.");
         this.DefaultValue = Value;
         return this;

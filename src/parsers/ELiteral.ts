@@ -26,7 +26,7 @@ export default class ELiteral<T extends number | string> extends EnvDataType<T> 
         const Env: string | undefined = process.env[Name]?.trim();
 
         if(!Env) {
-            if(!this.DefaultValue)
+            if(this.DefaultValue == undefined)
                 throw new TypeError(`Variable ${Name} doesn't exists.`);
             return this.DefaultValue;
         }
@@ -47,7 +47,7 @@ export default class ELiteral<T extends number | string> extends EnvDataType<T> 
 
     public Default(Value: T): this {
         if(!this.AcceptableValues.has(Value))
-            throw new TypeError(`Value "${Value}" isn't an acceptable literal value.`);
+            throw new TypeError(`Value ${Value} isn't an acceptable literal value.`);
         this.DefaultValue = Value;
         return this;
     }
