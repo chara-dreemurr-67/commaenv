@@ -31,7 +31,7 @@ export default class EString extends EnvDataType<string> {
             throw new TypeError("Mismatched type between default value and the provided type.");
 
         if(this.ValidatorFunc && !this.ValidatorFunc(Value))
-            throw new TypeError("Value failed validator test.");
+            throw new TypeError(this.ValidationFailureMessage ?? "Value failed validator test.");
 
         this.DefaultValue = Value;
         return this;
