@@ -2,6 +2,7 @@ import EnvDataType from "../types/EnvDataType.js";
 
 export default class EString extends EnvDataType<string> {
     private ValidatorFunc?: (Env: string) => boolean;
+    private ValidationFailureMessage?: any;
 
     public Parse(Name: string): string {
         const Env: string | undefined = process.env[Name];
@@ -13,8 +14,16 @@ export default class EString extends EnvDataType<string> {
         }
 
         if(this.ValidatorFunc && !this.ValidatorFunc(Env))
-            throw new TypeError(`Variable ${Name} failed validator test.`);
+            throw new TypeError(this.ValidationFailureMessage ?? `Variable ${Name} failed validator test.`);
         return Env;
+    }
+
+    /**
+     * Set a custom message for when string validation return false.
+     */
+    public OnValidationFailure(Message: any): this {
+        this.ValidationFailureMessage = Message;
+        return this;
     }
 
     public Default(Value: string): this {
@@ -32,6 +41,9 @@ export default class EString extends EnvDataType<string> {
      * Accepts a validation function that runs before returning.
      */
     public Validator(Validator: (Env: string) => boolean): this {
+        if(typeof Validator !== "function")
+            throw new TypeError("Validator must be a function.");
+
         this.ValidatorFunc = Validator;
         return this;
     }
