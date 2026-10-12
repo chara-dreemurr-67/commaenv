@@ -33,7 +33,7 @@ export default class ELiteral<T extends number | string> extends EnvDataType<T> 
 
         if(this.Type === "string") {
             if(!this.AcceptableValues.has(Env as T))
-                throw new TypeError(`Value "${Env}" isn't an acceptable literal value.`);
+                throw new TypeError(`Value ${Env} isn't an acceptable literal value.`);
             return Env as T;
         }
 
@@ -41,7 +41,7 @@ export default class ELiteral<T extends number | string> extends EnvDataType<T> 
         if(Number.isNaN(Parsed))
             throw new TypeError(`Variable ${Name} isn't a number.`);
         if(!this.AcceptableValues.has(Parsed as T))
-            throw new TypeError(`Value "${Env}" isn't an acceptable literal value.`);
+            throw new TypeError(`Value ${Parsed} isn't an acceptable literal value.`);
         return Parsed as T;
     }
 
