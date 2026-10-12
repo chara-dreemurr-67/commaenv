@@ -6,7 +6,9 @@ type TypeMap = {
 };
 
 export default class EArray<T extends "number" | "string"> extends EnvDataType<TypeMap[T][]> {
-    private P: (Value: string) => TypeMap[T][] = JSON.parse;
+    private ArrayParser: (Value: string) => TypeMap[T][] = JSON.parse;
+    private ArrayTransformer?: (Value: TypeMap[T], Index: number, Array: TypeMap[T][]) => TypeMap[T];
+    
     private readonly Type: T;
 
     constructor(Type: T) {
@@ -28,12 +30,12 @@ export default class EArray<T extends "number" | "string"> extends EnvDataType<T
         }
 
         try {
-            const Parsed: unknown[] = this.P(Env);
+            const Parsed: TypeMap[T][] = this.ArrayParser(Env);
 
             if(!Array.isArray(Parsed) || !Parsed.every(E => typeof E === this.Type))
                 throw new TypeError(`Variable ${Name} isn't an array of type ${this.Type}.`);
             
-            return Parsed as TypeMap[T][];
+            return this.ArrayTransformer ? Parsed.map(this.ArrayTransformer) : Parsed;
         }
         catch {
             throw new TypeError(`Variable ${Name} isn't an array of type ${this.Type}.`);
@@ -51,7 +53,17 @@ export default class EArray<T extends "number" | "string"> extends EnvDataType<T
     public Parser(Parser: (Value: string) => TypeMap[T][]): this {
         if(typeof Parser !== "function")
             throw new TypeError("Parser must be a function.");
-        this.P = Parser;
+        this.ArrayParser = Parser;
+        return this;
+    }
+
+    /**
+     * Provide a transformer function to transform the parsed array before returning it. The transformer function will be called for each element in the array, and it will receive the element value, its index, and the entire array as arguments. The return value of the transformer function will replace the original element in the array.
+     */
+    public Transformer(Transformer: (Value: TypeMap[T], Index: number, Array: TypeMap[T][]) => TypeMap[T]): this {
+        if(typeof Transformer !== "function")
+            throw new TypeError("Transformer must be a function.");
+        this.ArrayTransformer = Transformer;
         return this;
     }
 }

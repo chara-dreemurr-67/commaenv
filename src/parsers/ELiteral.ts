@@ -47,7 +47,6 @@ export default class ELiteral<T extends number | string> extends EnvDataType<T> 
         if(Number.isNaN(Parsed))
             throw new TypeError(`Variable ${Name} isn't a number.`);
 
-
         if(!this.AcceptableValues.has(Parsed as T))
             throw new TypeError(`Value ${Parsed} isn't an acceptable literal value.`);
         return Parsed as T;
