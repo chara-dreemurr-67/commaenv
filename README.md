@@ -18,10 +18,13 @@ npm install commaenv
 ```
 
 ## Basic usage
-
-### Use the global Env singleton
-```ts
+```typescript
+// Use the global Env singleton
 import Env from "commaenv";
+
+// Or create your own instance
+import { EnvLoader } from "commaenv";
+const Env = new EnvLoader();
 
 Env.RegisterVariable("PORT", Env.number().Default(3000));
 Env.RegisterVariable("NODE_ENV", Env.string().Default("development"));
@@ -36,28 +39,35 @@ const origins = Env.GetVariable<string[]>("ALLOWED_ORIGINS");
 console.log(port, nodeEnv, debugMode, origins);
 ```
 
-### Or create your own instance
-```ts
-import { EnvLoader } from "commaenv";
-const Env = new EnvLoader();
-
-// The rest should be the same as the above example.
-```
-
 ## Supported types
+
+All of the EnvDataType children share 2 common methods.
+```typescript
+EnvDataType.prototype.Parse; // Take a string name of the environment variable and parse it.
+EnvDataType.prototype.Default; // Set the default value that will be returned EnvDataType.prototype.Parse did not get a value for the variable.
+```
 
 ### String
 
-```ts
+```typescript
 Env.RegisterVariable("APP_NAME", Env.string().Default("my-app"));
 const appName = Env.GetVariable<string>("APP_NAME");
 ```
 
+#### All string parser method
+```typescript
+EString.prototype.OnValidationFailure; // Set the string validation error message.
+EString.prototype.Validator; // Set a custom sring validation function. Throws a TypeError with "Value failed validator test." as the message, or OnValidationFailure if set.
+EString.Prototype.MaxLength; // Set a maximum length for the string variable.
+EString.Prototype.MinLength; // Set a minimum length for the string variable.
+```
+
+#### Note
 Strings are returned as-is. Empty strings are treated as missing only when a non-string parser is being used.
 
 ### Number
 
-```ts
+```typescript
 Env.RegisterVariable("PORT", Env.number().Default(8080));
 const port = Env.GetVariable<number>("PORT");
 ```
@@ -66,11 +76,12 @@ Accepted values are valid JavaScript numbers. If the value is not numeric, it th
 
 ### Boolean
 
-```ts
+```typescript
 Env.RegisterVariable("DEBUG", Env.boolean().Default(false));
 const debug = Env.GetVariable<boolean>("DEBUG");
 ```
 
+#### Note
 Boolean values accept the following forms:
 
 - `true`, `1`
@@ -80,23 +91,24 @@ The parser normalizes case and trims whitespace before evaluating.
 
 ### Literal
 
-```ts
+```typescript
 Env.RegisterVariable("NODE_ENV", Env.literal("development", "production", "test"));
 const nodeEnv = Env.GetVariable<"development" | "production" | "test">("NODE_ENV");
 ```
 
 `Env.literal()` accepts a finite set of allowed values. It supports either strings or numbers, and rejects anything outside that set.
 
-```ts
+```typescript
 Env.RegisterVariable("HTTP_STATUS", Env.literal(200, 201, 204).Default(204));
 const status = Env.GetVariable<200 | 201 | 204>("HTTP_STATUS");
 ```
 
+#### Note
 For string literals, values are checked after trimming whitespace. For numeric literals, the environment value is parsed as a number before being matched against the allowed values.
 
 ### Array
 
-```ts
+```typescript
 Env.RegisterVariable("FEATURES", Env.array("string").Default(["auth", "billing"]));
 const features = Env.GetVariable<string[]>("FEATURES");
 ```
@@ -114,7 +126,7 @@ FEATURES='["auth","billing"]'
 
 You can also provide a custom parser:
 
-```ts
+```typescript
 Env.RegisterVariable(
   "CORS",
   Env.array("string").Parser((value) => value.split(",")).Default(["localhost"])
@@ -123,7 +135,7 @@ Env.RegisterVariable(
 
 ## Registering variables
 
-```ts
+```typescript
 Env.RegisterVariable("TOKEN");
 const token = Env.GetVariable<string>("TOKEN");
 ```
@@ -134,7 +146,7 @@ If you do not pass a type, the package defaults to a string parser.
 
 When a variable is missing or empty for non-string types, the parser will fall back to the default value if one has been provided:
 
-```ts
+```typescript
 Env.RegisterVariable("CACHE_TTL", Env.number().Default(60));
 ```
 
@@ -166,3 +178,4 @@ This project is licensed under the GPL-3.0-only license.
 ## Todo
 - ~~add literal type support~~
 - ~~make GetVariable infer the type of the variable, if that's even possible~~ currently not possible without major changes to the lib
+- MAYBE add a tuple parser
