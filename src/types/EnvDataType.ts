@@ -3,6 +3,6 @@ export default abstract class EnvDataType<T> {
     public abstract Parse(Name: string): T;
     /**
      * Set the default return value of the variable.
-     */
-    public abstract Default(Value: T): this;
+    */
+   public abstract Default(Value: T): this;
 }

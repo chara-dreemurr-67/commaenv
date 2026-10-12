@@ -49,6 +49,8 @@ export default class EArray<T extends "number" | "string"> extends EnvDataType<T
     }
 
     public Parser(Parser: (Value: string) => TypeMap[T][]): this {
+        if(typeof Parser !== "function")
+            throw new TypeError("Parser must be a function.");
         this.P = Parser;
         return this;
     }
