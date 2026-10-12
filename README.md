@@ -44,7 +44,7 @@ console.log(port, nodeEnv, debugMode, origins);
 All of the EnvDataType children share 2 common methods.
 ```typescript
 EnvDataType.prototype.Parse; // Take a string name of the environment variable and parse it.
-EnvDataType.prototype.Default; // Set the default value that will be returned EnvDataType.prototype.Parse did not get a value for the variable.
+EnvDataType.prototype.Default; // Set the default value that will be returned when EnvDataType.prototype.Parse did not get a value for the variable.
 ```
 
 ### String
