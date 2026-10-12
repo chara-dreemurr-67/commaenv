@@ -3,6 +3,7 @@ import EnvDataType from "../types/EnvDataType.js";
 export default class ELiteral<T extends number | string> extends EnvDataType<T> {
     private readonly AcceptableValues: Set<T>;
     private readonly Type: "string" | "number";
+    private InsensitiveFlag: boolean = false;
 
     public constructor(AcceptableValue: T);
     public constructor(...AcceptableValues: T[]);
@@ -32,14 +33,21 @@ export default class ELiteral<T extends number | string> extends EnvDataType<T> 
         }
 
         if(this.Type === "string") {
-            if(!this.AcceptableValues.has(Env as T))
+            const ValueSet: Set<T> = this.InsensitiveFlag 
+                ? new Set(this.AcceptableValues.values().map(V => String(V).toLowerCase())) as Set<T>
+                : this.AcceptableValues
+            ;
+            const Value: string = this.InsensitiveFlag ? Env.toLowerCase() : Env;
+            if(!ValueSet.has(Value as T))
                 throw new TypeError(`Value ${Env} isn't an acceptable literal value.`);
-            return Env as T;
+            return Value as T;
         }
 
         const Parsed: number = Number(Env);
         if(Number.isNaN(Parsed))
             throw new TypeError(`Variable ${Name} isn't a number.`);
+
+
         if(!this.AcceptableValues.has(Parsed as T))
             throw new TypeError(`Value ${Parsed} isn't an acceptable literal value.`);
         return Parsed as T;
@@ -49,6 +57,16 @@ export default class ELiteral<T extends number | string> extends EnvDataType<T> 
         if(!this.AcceptableValues.has(Value))
             throw new TypeError(`Value ${Value} isn't an acceptable literal value.`);
         this.DefaultValue = Value;
+        return this;
+    }
+
+    /**
+     * Whether to ignore case when comparing string literal values. This method can only be used with string literal values.
+     */
+    public Insensitive(): this {
+        if(this.Type !== "string")
+            throw new TypeError("Insensitive method can only be used with string literal values.");
+        this.InsensitiveFlag = true;
         return this;
     }
 }
