@@ -1,6 +1,6 @@
 # commaenv
 
-`commaenv` is a tiny typed environment variable parser for Node.js. It reads from `process.env`, validates values, and gives you typed access without loading `.env` files or depending on `dotenv`.
+Unlike dotenv, this parses environment variables instead of loading them.
 
 ## Why use it?
 
@@ -49,17 +49,18 @@ EnvDataType.prototype.Default; // Set the default value that will be returned wh
 
 ### String
 
-```typescript
-Env.RegisterVariable("APP_NAME", Env.string().Default("my-app"));
-const appName = Env.GetVariable<string>("APP_NAME");
-```
-
 #### All string parser method
 ```typescript
 EString.prototype.OnValidationFailure; // Set the string validation error message.
 EString.prototype.Validator; // Set a custom sring validation function. Throws a TypeError with "Value failed validator test." as the message, or OnValidationFailure if set.
-EString.Prototype.MaxLength; // Set a maximum length for the string variable.
-EString.Prototype.MinLength; // Set a minimum length for the string variable.
+EString.prototype.MaxLength; // Set a maximum length for the string variable.
+EString.prototype.MinLength; // Set a minimum length for the string variable.
+```
+
+#### Example
+```typescript
+Env.RegisterVariable("APP_NAME", Env.string().Default("my-app"));
+const appName = Env.GetVariable<string>("APP_NAME");
 ```
 
 #### Note
@@ -67,11 +68,22 @@ Strings are returned as-is. Empty strings are treated as missing only when a non
 
 ### Number
 
+#### All number parser method
+```typescript
+ENumber.prototype.Positive; // Make parser only accept positive numbers.
+ENumber.prototype.Negative; // Make parser only accept negative numbers.
+ENumber.prototype.Integer; // Make parser only accept negative Integers. Note that numbers end with .0 are treated as integers by the javascript engine, and therefore will be treated as integers by this method as it uses Number.isInteger to check.
+ENumber.prototype.Max; // Set the maximum acceptable value of the variable.
+ENumber.prototype.Min; // Set the minimum acceptable value of the variable.
+```
+
+#### Example
 ```typescript
 Env.RegisterVariable("PORT", Env.number().Default(8080));
 const port = Env.GetVariable<number>("PORT");
 ```
 
+#### Note
 Accepted values are valid JavaScript numbers. If the value is not numeric, it throws a `TypeError`.
 
 ### Boolean
@@ -91,47 +103,45 @@ The parser normalizes case and trims whitespace before evaluating.
 
 ### Literal
 
+#### All literal union parser method
+```typescript
+ELiteral.prototype.Insensitive; // Whether to ignore case when checking for valid literal string type.
+```
+
+#### Example
 ```typescript
 Env.RegisterVariable("NODE_ENV", Env.literal("development", "production", "test"));
 const nodeEnv = Env.GetVariable<"development" | "production" | "test">("NODE_ENV");
 ```
-
-`Env.literal()` accepts a finite set of allowed values. It supports either strings or numbers, and rejects anything outside that set.
-
 ```typescript
 Env.RegisterVariable("HTTP_STATUS", Env.literal(200, 201, 204).Default(204));
 const status = Env.GetVariable<200 | 201 | 204>("HTTP_STATUS");
 ```
 
 #### Note
+`Env.literal()` accepts a finite set of allowed values. It supports either strings or numbers, and rejects anything outside that set.
+
 For string literals, values are checked after trimming whitespace. For numeric literals, the environment value is parsed as a number before being matched against the allowed values.
 
 ### Array
 
+#### All array parser method
+```typescript
+EArray.prototype.Parser; // Set a custom array parser for EArray.prototype.Parse, which uses JSON.parse by default.
+EArray.prototype.Transformer; // Add a custom transformer method to transform the result array, this function is called once for every item in the array.
+```
+
+#### Example
 ```typescript
 Env.RegisterVariable("FEATURES", Env.array("string").Default(["auth", "billing"]));
 const features = Env.GetVariable<string[]>("FEATURES");
 ```
 
+#### Note
 Supported array element types are:
 
 - `Env.array("string")`
 - `Env.array("number")`
-
-The default parser expects a JSON array string, such as:
-
-```bash
-FEATURES='["auth","billing"]'
-```
-
-You can also provide a custom parser:
-
-```typescript
-Env.RegisterVariable(
-  "CORS",
-  Env.array("string").Parser((value) => value.split(",")).Default(["localhost"])
-);
-```
 
 ## Registering variables
 

@@ -37,7 +37,7 @@ export class EnvLoader {
         if(!Type)
             Type = this.string() as unknown as EnvDataType<T>;
 
-        this.Variables.set(Name, Type.Parse(Name))
+        this.Variables.set(Name, Type.Parse(Name));
         return this;
     }
     

@@ -121,6 +121,12 @@ export default class ENumber extends EnvDataType<number> {
      * Set the maximum value of the variable. This runs after the positive / negative checks.
      */
     public Max(Value: number): this {
+        if(typeof Value !== "number" || Number.isNaN(Value))
+            throw new TypeError("Value isn't a number.");
+
+        if(this.MinValue != undefined && this.MinValue >= Value)
+            throw new TypeError("Maximum value must be greater than the minimum value.");
+
         this.TestParse(Value);
         this.MaxValue = Value;
         return this;
@@ -130,6 +136,12 @@ export default class ENumber extends EnvDataType<number> {
      * Set the minimum value of the variable. This runs after the positive / negative checks.
      */
     public Min(Value: number): this {
+        if(typeof Value !== "number" || Number.isNaN(Value))
+            throw new TypeError("Value isn't a number.");
+
+        if(this.MaxValue != undefined && this.MaxValue <= Value)
+            throw new TypeError("Minimum value must be less than the maximum value.");
+
         this.TestParse(Value);
         this.MinValue = Value;
         return this;
