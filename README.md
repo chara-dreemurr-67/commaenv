@@ -52,7 +52,7 @@ EnvDataType.prototype.Default; // Set the default value that will be returned wh
 #### All string parser method
 ```typescript
 EString.prototype.OnValidationFailure; // Set the string validation error message.
-EString.prototype.Validator; // Set a custom sring validation function. Throws a TypeError with "Value failed validator test." as the message, or OnValidationFailure if set.
+EString.prototype.Validator; // Set a custom string validation function. Throws a TypeError with "Value failed validator test." as the message, or OnValidationFailure if set.
 EString.prototype.MaxLength; // Set a maximum length for the string variable.
 EString.prototype.MinLength; // Set a minimum length for the string variable.
 ```
