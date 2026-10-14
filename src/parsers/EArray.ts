@@ -5,7 +5,7 @@ type TypeMap = {
     string: string;
 };
 
-export default class EArray<T extends "number" | "string"> extends EnvDataType<TypeMap[T][]> {
+export default class EArray<T extends keyof TypeMap> extends EnvDataType<TypeMap[T][]> {
     private ArrayParser: (Value: string) => TypeMap[T][] = JSON.parse;
     private ArrayTransformer?: (Value: TypeMap[T], Index: number, Array: TypeMap[T][]) => TypeMap[T];
     
